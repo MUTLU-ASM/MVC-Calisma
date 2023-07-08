@@ -23,7 +23,8 @@ namespace BTK_Akademi_Proje1.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Apply([FromForm] Candidate candidate)
         {
-            return View();
+            Repository.Add(candidate);
+            return View("FeedBack",candidate);
         }
     }
 }
