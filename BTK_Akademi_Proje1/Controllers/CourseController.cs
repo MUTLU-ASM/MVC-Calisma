@@ -11,9 +11,10 @@ namespace BTK_Akademi_Proje1.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            var model = Repository.Applications;
+            return View(model);
         }
-        
+
         public IActionResult Apply()
         {
             return View();
@@ -23,8 +24,16 @@ namespace BTK_Akademi_Proje1.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Apply([FromForm] Candidate candidate)
         {
-            Repository.Add(candidate);
-            return View("FeedBack",candidate);
+            if (Repository.Applications.Any(c=>c.Email.Equals(candidate.Email)))
+            {
+                ModelState.AddModelError("", "There is already an application for you.");
+            }
+            if (ModelState.IsValid)
+            {
+                Repository.Add(candidate);
+                return View("FeedBack", candidate);
+            }
+            return View();
         }
     }
 }
